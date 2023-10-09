@@ -54,6 +54,31 @@ const getPost = async (req, res) => {
     }
 };
 
+const getUserPosts = async (req, res) => {
+    try {
+        const {username} = req.params;
+        const user = await User.findOne({username});
+
+        if(!user){
+            return res.status(404).json({error:"User not found"});
+        }
+
+        const post = await Post.find({postedBy:user._id}).sort({ createdAt: -1 });
+
+        if(!post){
+            return res.status(404).json({error:"Post not found"});
+        }
+
+        res.status(200).json(post);
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 const deletePost = async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
@@ -148,4 +173,4 @@ const getFeedPosts = async (req, res) => {
     }
 };
 
-export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts };
+export { createPost, getPost, deletePost, likeUnlikePost, replyToPost, getFeedPosts, getUserPosts };
