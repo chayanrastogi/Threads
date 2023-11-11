@@ -4,9 +4,12 @@ import { Button } from '@chakra-ui/react'
 import React, { useState, useRef } from 'react'
 import { BsFillImageFill } from 'react-icons/bs';
 import usePreviewImg from '../hooks/usePreviewImg';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import userAtom from '../atoms/userAtom';
 import useShowToast from '../hooks/useShowToast';
+import postsAtom from '../atoms/postsAtom';
+import { set } from 'date-fns';
+import { useParams } from 'react-router-dom';
 
 const MAX_CHAR = 500;
 
@@ -18,8 +21,10 @@ const CreatePost = () => {
     const imageRef = useRef(null);
     const [remainingChar, setRemainingChar] = useState(MAX_CHAR);
     const user = useRecoilValue(userAtom);
-    const  showToast  = useShowToast();
-    const[loading, setLoading] = useState(false);
+    const showToast = useShowToast();
+    const [loading, setLoading] = useState(false);
+    const [post, setPost] = useRecoilState(postsAtom);
+    const { username } = useParams();
 
     const handleTextChange = (e) => {
         const inputText = e.target.value;
@@ -37,26 +42,29 @@ const CreatePost = () => {
     const handleCreatePost = async () => {
         setLoading(true);
         try {
-			const res = await fetch("/api/posts/create", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ postedBy: user._id, text: postText, img: imgUrl }),
-			});
+            const res = await fetch("/api/posts/create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ postedBy: user._id, text: postText, img: imgUrl }),
+            });
 
-			const data = await res.json();
-			if (data.error) {
-				showToast("Error", data.error, "error");
-				return;
-			}
-			showToast("Success", "Post created successfully", "success");
-			onClose();
+            const data = await res.json();
+            if (data.error) {
+                showToast("Error", data.error, "error");
+                return;
+            }
+            showToast("Success", "Post created successfully", "success");
+            if (username === user.username) {
+                setPost([data, ...post]);
+            }
+            onClose();
             setPostText("");
             setImgUrl("");
-		} catch (error) {
-			showToast("Error", error, "error");
-		}finally{
+        } catch (error) {
+            showToast("Error", error, "error");
+        } finally {
             setLoading(false);
         }
     };
@@ -65,7 +73,7 @@ const CreatePost = () => {
         <>
             <Button
                 position={'fixed'}
-                right={10}
+                right={5}
                 bottom={10}
                 leftIcon={<AddIcon />}
                 bg={useColorModeValue('gray.300', 'gray.dark')}
@@ -109,7 +117,7 @@ const CreatePost = () => {
 
                         {imgUrl && (
                             <Flex mt={5} w={"full"} position={"relative"}>
-                                <Image src={imgUrl} alt="preview"/>
+                                <Image src={imgUrl} alt="preview" />
                                 <CloseButton
                                     onClick={() => setImgUrl("")}
                                     position={"absolute"}
