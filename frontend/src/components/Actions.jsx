@@ -1,34 +1,41 @@
-import { useNavigate } from 'react-router-dom';
-import { Box, Button, Flex, FormControl, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useColorModeValue, useDisclosure } from "@chakra-ui/react";
+import {
+	Box,
+	Button,
+	Flex,
+	FormControl,
+	Input,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
+	Text,
+	useColorModeValue,
+	useDisclosure,
+} from "@chakra-ui/react";
 import { useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
-import useShowToast from '../hooks/useShowToast';
-import postsAtom from '../atoms/postsAtom';
-import { set } from 'date-fns';
+import useShowToast from "../hooks/useShowToast";
+import postsAtom from "../atoms/postsAtom";
 
-
-const Actions = ({post}) => {
+const Actions = ({ post }) => {
 	const user = useRecoilValue(userAtom);
-
 	const [liked, setLiked] = useState(post.likes.includes(user?._id));
 	const [posts, setPosts] = useRecoilState(postsAtom);
 	const [isLiking, setIsLiking] = useState(false);
+	const [isReplying, setIsReplying] = useState(false);
 	const [reply, setReply] = useState("");
-	const [replying, setReplying] = useState(false);
 
 	const showToast = useShowToast();
-	const { isOpen, onOpen, onClose } = useDisclosure()
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const handleLikeAndUnlike = async () => {
-		if (!user) {
-			showToast("Error", "You need to login to like and unlike posts", "error");
-			return;
-		}
-
+		if (!user) return showToast("Error", "You must be logged in to like a post", "error");
 		if (isLiking) return;
 		setIsLiking(true);
-
 		try {
 			const res = await fetch("/api/posts/like/" + post._id, {
 				method: "PUT",
@@ -40,26 +47,26 @@ const Actions = ({post}) => {
 			if (data.error) return showToast("Error", data.error, "error");
 
 			if (!liked) {
-				// add the id of the current user to the post.likes array
+				// add the id of the current user to post.likes array
 				const updatedPosts = posts.map((p) => {
 					if (p._id === post._id) {
 						return { ...p, likes: [...p.likes, user._id] };
 					}
 					return p;
-				})
+				});
 				setPosts(updatedPosts);
 			} else {
+				// remove the id of the current user from post.likes array
 				const updatedPosts = posts.map((p) => {
 					if (p._id === post._id) {
 						return { ...p, likes: p.likes.filter((id) => id !== user._id) };
 					}
 					return p;
-				})
+				});
 				setPosts(updatedPosts);
 			}
 
 			setLiked(!liked);
-
 		} catch (error) {
 			showToast("Error", error.message, "error");
 		} finally {
@@ -68,40 +75,34 @@ const Actions = ({post}) => {
 	};
 
 	const handleReply = async () => {
-		if (!user) return showToast("Error", "You need to login to reply to posts", "error");
-		if (reply === "") {
-			showToast("Error", "Reply cannot be empty", "error")
-			return;
-		};
-		if (replying) return;
-		setReplying(true);
-
+		if (!user) return showToast("Error", "You must be logged in to reply to a post", "error");
+		if (isReplying) return;
+		setIsReplying(true);
 		try {
 			const res = await fetch("/api/posts/reply/" + post._id, {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ text: reply })
+				body: JSON.stringify({ text: reply }),
 			});
-
 			const data = await res.json();
 			if (data.error) return showToast("Error", data.error, "error");
-			showToast("Success", "Reply posted successfully", "success");
 
 			const updatedPosts = posts.map((p) => {
 				if (p._id === post._id) {
-					return { ...p, replies: [...p.replies, data.reply] };
+					return { ...p, replies: [...p.replies, data] };
 				}
 				return p;
-			})
+			});
 			setPosts(updatedPosts);
-			setReply("");
+			showToast("Success", "Reply posted successfully", "success");
 			onClose();
+			setReply("");
 		} catch (error) {
 			showToast("Error", error.message, "error");
 		} finally {
-			setReplying(false);
+			setIsReplying(false);
 		}
 	};
 
@@ -145,9 +146,8 @@ const Actions = ({post}) => {
 					></path>
 				</svg>
 
-				<RepostSvg />
-				<ShareSvg />
-
+				<RepostSVG />
+				<ShareSVG />
 			</Flex>
 
 			<Flex gap={2} alignItems={"center"}>
@@ -160,17 +160,15 @@ const Actions = ({post}) => {
 				</Text>
 			</Flex>
 
-			<Modal
-				isOpen={isOpen}
-				onClose={onClose}
-			>
+			<Modal isOpen={isOpen} onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent bg={useColorModeValue('white', '#101010')}>
 					<ModalHeader></ModalHeader>
 					<ModalCloseButton />
-					<ModalBody pb={6} mt={1}>
+					<ModalBody pb={6}>
 						<FormControl>
-							<Input placeholder='Reply goes here...'
+							<Input
+								placeholder='Reply goes here..'
 								value={reply}
 								onChange={(e) => setReply(e.target.value)}
 							/>
@@ -178,27 +176,19 @@ const Actions = ({post}) => {
 					</ModalBody>
 
 					<ModalFooter>
-						<Button
-							bg={useColorModeValue('gray.300', 'gray.dark')} s
-							ize={"sm"}
-							mr={3}
-							onClick={handleReply}
-							isLoading={replying}
-						>
+						<Button bg={useColorModeValue('gray.300', 'gray.dark')} size={"sm"} mr={3} isLoading={isReplying} onClick={handleReply}>
 							Reply
 						</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>
-
 		</Flex>
 	);
 };
 
 export default Actions;
 
-
-const RepostSvg = () => {
+const RepostSVG = () => {
 	return (
 		<svg
 			aria-label='Repost'
@@ -215,10 +205,10 @@ const RepostSvg = () => {
 				d='M19.998 9.497a1 1 0 0 0-1 1v4.228a3.274 3.274 0 0 1-3.27 3.27h-5.313l1.791-1.787a1 1 0 0 0-1.412-1.416L7.29 18.287a1.004 1.004 0 0 0-.294.707v.001c0 .023.012.042.013.065a.923.923 0 0 0 .281.643l3.502 3.504a1 1 0 0 0 1.414-1.414l-1.797-1.798h5.318a5.276 5.276 0 0 0 5.27-5.27v-4.228a1 1 0 0 0-1-1Zm-6.41-3.496-1.795 1.795a1 1 0 1 0 1.414 1.414l3.5-3.5a1.003 1.003 0 0 0 0-1.417l-3.5-3.5a1 1 0 0 0-1.414 1.414l1.794 1.794H8.27A5.277 5.277 0 0 0 3 9.271V13.5a1 1 0 0 0 2 0V9.271a3.275 3.275 0 0 1 3.271-3.27Z'
 			></path>
 		</svg>
-	)
+	);
 };
 
-const ShareSvg = () => {
+const ShareSVG = () => {
 	return (
 		<svg
 			aria-label='Share'
@@ -248,5 +238,5 @@ const ShareSvg = () => {
 				strokeWidth='2'
 			></polygon>
 		</svg>
-	)
+	);
 };

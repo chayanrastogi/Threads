@@ -2,24 +2,29 @@ import { Avatar } from "@chakra-ui/avatar";
 import { Box, Flex, Link, Text, VStack } from "@chakra-ui/layout";
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu";
 import { Portal } from "@chakra-ui/portal";
-import { Button, useColorModeValue, useToast } from "@chakra-ui/react";
+import { Button, useToast } from "@chakra-ui/react";
 import { BsInstagram } from "react-icons/bs";
 import { CgMoreO } from "react-icons/cg";
 import { useRecoilValue } from "recoil";
 import userAtom from "../atoms/userAtom";
 import { Link as RouterLink } from "react-router-dom";
 import useFollowUnfollow from "../hooks/useFollowUnfollow";
-import useShowToast from "../hooks/useShowToast";
 
 const UserHeader = ({ user }) => {
-	const showToast = useShowToast();
+	const toast = useToast();
 	const currentUser = useRecoilValue(userAtom); // logged in user
 	const { handleFollowUnfollow, following, updating } = useFollowUnfollow(user);
 
 	const copyURL = () => {
 		const currentURL = window.location.href;
 		navigator.clipboard.writeText(currentURL).then(() => {
-			showToast("Success", "Link copied to clipboard", "success");
+			toast({
+				title: "Success.",
+				status: "success",
+				description: "Profile link copied.",
+				duration: 3000,
+				isClosable: true,
+			});
 		});
 	};
 
@@ -65,11 +70,11 @@ const UserHeader = ({ user }) => {
 
 			{currentUser?._id === user._id && (
 				<Link as={RouterLink} to='/update'>
-					<Button size={"sm"} bg={useColorModeValue('gray.300', 'gray.dark')} isLoading={updating}>Update Profile</Button>
+					<Button size={"sm"}>Update Profile</Button>
 				</Link>
 			)}
 			{currentUser?._id !== user._id && (
-				<Button size={"sm"} onClick={handleFollowUnfollow} isLoading={updating} bg={useColorModeValue('gray.300', 'gray.dark')}>
+				<Button size={"sm"} onClick={handleFollowUnfollow} isLoading={updating}>
 					{following ? "Unfollow" : "Follow"}
 				</Button>
 			)}
