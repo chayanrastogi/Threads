@@ -30,6 +30,9 @@ import { useParams } from "react-router-dom";
 const MAX_CHAR = 500;
 
 const CreatePost = () => {
+
+	const port = "https://threads-server-zh1c.onrender.com";
+
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [postText, setPostText] = useState("");
 	const { handleImageChange, imgUrl, setImgUrl } = usePreviewImg();
@@ -57,7 +60,7 @@ const CreatePost = () => {
 	const handleCreatePost = async () => {
 		setLoading(true);
 		try {
-			const res = await fetch("/api/posts/create", {
+			const res = await fetch(`${port}/api/posts/create`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

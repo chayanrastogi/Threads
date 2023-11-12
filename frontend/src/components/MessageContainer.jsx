@@ -9,6 +9,9 @@ import userAtom from "../atoms/userAtom";
 import { useSocket } from "../context/SocketContext.jsx";
 import messageSound from "../assets/sounds/message.mp3";
 const MessageContainer = () => {
+
+	const port = "https://threads-server-zh1c.onrender.com";
+
 	const showToast = useShowToast();
 	const selectedConversation = useRecoilValue(selectedConversationAtom);
 	const [loadingMessages, setLoadingMessages] = useState(true);
@@ -87,7 +90,7 @@ const MessageContainer = () => {
 			setMessages([]);
 			try {
 				if (selectedConversation.mock) return;
-				const res = await fetch(`/api/messages/${selectedConversation.userId}`);
+				const res = await fetch(`${port}/api/messages/${selectedConversation.userId}`);
 				const data = await res.json();
 				if (data.error) {
 					showToast("Error", data.error, "error");

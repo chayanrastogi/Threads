@@ -21,6 +21,9 @@ import useShowToast from "../hooks/useShowToast";
 import userAtom from "../atoms/userAtom";
 
 export default function Login() {
+
+    const port = "https://threads-server-zh1c.onrender.com";
+
     const [showPassword, setShowPassword] = useState(false);
     const setAuthScreen = useSetRecoilState(authScreenAtom);
     const setUser = useSetRecoilState(userAtom);
@@ -34,7 +37,7 @@ export default function Login() {
     const handleLogin = async () => {
         setLoading(true);
         try {
-            const res = await fetch("/api/users/login", {
+            const res = await fetch(`${port}/api/users/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

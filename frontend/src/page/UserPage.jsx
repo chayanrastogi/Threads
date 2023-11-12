@@ -10,6 +10,8 @@ import postsAtom from '../atoms/postsAtom';
 
 function UserPage() {
 
+  const port = "https://threads-server-zh1c.onrender.com";
+
   const {loading, user} = useGetUserProfile();
   const { username } = useParams();
   const showToast = useShowToast();
@@ -21,7 +23,7 @@ function UserPage() {
     const getPosts = async () => {
       setFetchingPosts(true);
       try {
-        const res = await fetch(`/api/posts/user/${username}`);
+        const res = await fetch(`${port}/api/posts/user/${username}`);
         const data = await res.json();
         if (data.error) {
           showToast("Error", data.error, "error");

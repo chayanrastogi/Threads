@@ -22,6 +22,9 @@ import useShowToast from "../hooks/useShowToast";
 import userAtom from "../atoms/userAtom";
 
 export default function SignupCard() {
+
+    const port = "https://threads-server-zh1c.onrender.com";
+
     const [showPassword, setShowPassword] = useState(false);
     const setAuthScreen = useSetRecoilState(authScreenAtom);
     const [inputs, setInputs] = useState({
@@ -36,7 +39,7 @@ export default function SignupCard() {
 
     const handleSignup = async () => {
         try {
-            const res = await fetch("/api/users/signup", {
+            const res = await fetch(`${port}/api/users/signup`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

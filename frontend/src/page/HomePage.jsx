@@ -6,6 +6,9 @@ import { useRecoilState } from "recoil";
 import postsAtom from "../atoms/postsAtom";
 
 const HomePage = () => {
+
+	const port = "https://threads-server-zh1c.onrender.com";
+
 	const [posts, setPosts] = useRecoilState(postsAtom);
 	const [loading, setLoading] = useState(true);
 	const showToast = useShowToast();
@@ -13,7 +16,7 @@ const HomePage = () => {
 		const getFeedPosts = async () => {
 			setLoading(true);
 			try {
-				const res = await fetch("/api/posts/feed");
+				const res = await fetch(`${port}/api/posts/feed`);
 				const data = await res.json();
 				if (data.error) {
 					showToast("Error", data.error, "error");

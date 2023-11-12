@@ -7,12 +7,20 @@ import postRoutes from "./routes/postRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import { v2 as cloudinary } from "cloudinary";
 import { app, server } from "./socket/socket.js";
+import cors from "cors";
 
 dotenv.config();
 
 connectDB();
 
 const PORT = process.env.PORT || 5000;
+
+// Allow requests from specific origins
+const corsOptions = {
+	origin: 'https://6550bfb877b78a726e8dbdb2--frabjous-pegasus-595d44.netlify.app',
+  };
+  
+  app.use(cors(corsOptions));
 
 cloudinary.config({
 	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,

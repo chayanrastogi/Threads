@@ -12,6 +12,9 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import postsAtom from "../atoms/postsAtom";
 
 const PostPage = () => {
+
+	const port = "https://threads-server-zh1c.onrender.com";
+
 	const { user, loading } = useGetUserProfile();
 	const [posts, setPosts] = useRecoilState(postsAtom);
 	const showToast = useShowToast();
@@ -25,7 +28,7 @@ const PostPage = () => {
 		const getPost = async () => {
 			setPosts([]);
 			try {
-				const res = await fetch(`/api/posts/${pid}`);
+				const res = await fetch(`${port}/api/posts/${pid}`);
 				const data = await res.json();
 				if (data.error) {
 					showToast("Error", data.error, "error");
@@ -43,7 +46,7 @@ const PostPage = () => {
 		try {
 			if (!window.confirm("Are you sure you want to delete this post?")) return;
 
-			const res = await fetch(`/api/posts/${currentPost._id}`, {
+			const res = await fetch(`${port}/api/posts/${currentPost._id}`, {
 				method: "DELETE",
 			});
 			const data = await res.json();

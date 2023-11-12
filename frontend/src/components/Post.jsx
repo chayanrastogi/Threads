@@ -12,6 +12,9 @@ import userAtom from "../atoms/userAtom";
 import postsAtom from "../atoms/postsAtom";
 
 const Post = ({ post, postedBy }) => {
+
+	const port = "https://threads-server-zh1c.onrender.com";
+
 	const [user, setUser] = useState(null);
 	const showToast = useShowToast();
 	const currentUser = useRecoilValue(userAtom);
@@ -21,7 +24,7 @@ const Post = ({ post, postedBy }) => {
 	useEffect(() => {
 		const getUser = async () => {
 			try {
-				const res = await fetch("/api/users/profile/" + postedBy);
+				const res = await fetch(`${port}/api/users/profile/` + postedBy);
 				const data = await res.json();
 				if (data.error) {
 					showToast("Error", data.error, "error");
@@ -42,7 +45,7 @@ const Post = ({ post, postedBy }) => {
 			e.preventDefault();
 			if (!window.confirm("Are you sure you want to delete this post?")) return;
 
-			const res = await fetch(`/api/posts/${post._id}`, {
+			const res = await fetch(`${port}/api/posts/${post._id}`, {
 				method: "DELETE",
 			});
 			const data = await res.json();
