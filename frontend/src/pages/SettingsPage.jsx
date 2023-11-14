@@ -3,7 +3,6 @@ import useShowToast from "../hooks/useShowToast";
 import useLogout from "../hooks/useLogout";
 
 export const SettingsPage = () => {
-
 	const showToast = useShowToast();
 	const logout = useLogout();
 
@@ -11,7 +10,7 @@ export const SettingsPage = () => {
 		if (!window.confirm("Are you sure you want to freeze your account?")) return;
 
 		try {
-			const res = await fetch(`/api/users/freeze`, {
+			const res = await fetch("/api/users/freeze", {
 				method: "PUT",
 				headers: { "Content-Type": "application/json" },
 			});

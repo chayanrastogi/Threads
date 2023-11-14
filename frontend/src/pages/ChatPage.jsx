@@ -11,7 +11,6 @@ import userAtom from "../atoms/userAtom";
 import { useSocket } from "../context/SocketContext";
 
 const ChatPage = () => {
-	
 	const [searchingUser, setSearchingUser] = useState(false);
 	const [loadingConversations, setLoadingConversations] = useState(true);
 	const [searchText, setSearchText] = useState("");
@@ -44,7 +43,7 @@ const ChatPage = () => {
 	useEffect(() => {
 		const getConversations = async () => {
 			try {
-				const res = await fetch(`/api/messages/conversations`);
+				const res = await fetch("/api/messages/conversations");
 				const data = await res.json();
 				if (data.error) {
 					showToast("Error", data.error, "error");
