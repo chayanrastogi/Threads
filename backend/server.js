@@ -16,11 +16,11 @@ connectDB();
 const PORT = process.env.PORT || 5000;
 
 // Allow requests from specific origins
-const corsOptions = {
-	origin: 'https://threads-server-zh1c.onrender.com',
-  };
-  
-  app.use(cors(corsOptions));
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	// Other headers...
+	next();
+  });
 
 cloudinary.config({
 	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
