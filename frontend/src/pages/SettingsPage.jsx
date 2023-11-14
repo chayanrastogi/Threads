@@ -4,8 +4,6 @@ import useLogout from "../hooks/useLogout";
 
 export const SettingsPage = () => {
 
-	const port = "https://threads-server-zh1c.onrender.com";
-
 	const showToast = useShowToast();
 	const logout = useLogout();
 
@@ -13,7 +11,7 @@ export const SettingsPage = () => {
 		if (!window.confirm("Are you sure you want to freeze your account?")) return;
 
 		try {
-			const res = await fetch(`${port}/api/users/freeze`, {
+			const res = await fetch(`/api/users/freeze`, {
 				method: "PUT",
 				headers: { "Content-Type": "application/json" },
 			});

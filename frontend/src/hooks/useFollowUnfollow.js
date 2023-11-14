@@ -5,8 +5,6 @@ import { useRecoilValue } from "recoil";
 
 const useFollowUnfollow = (user) => {
 
-	const port = "https://threads-server-zh1c.onrender.com";
-
 	const currentUser = useRecoilValue(userAtom);
 	const [following, setFollowing] = useState(user.followers.includes(currentUser?._id));
 	const [updating, setUpdating] = useState(false);
@@ -21,7 +19,7 @@ const useFollowUnfollow = (user) => {
 
 		setUpdating(true);
 		try {
-			const res = await fetch(`${port}/api/users/follow/${user._id}`, {
+			const res = await fetch(`/api/users/follow/${user._id}`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

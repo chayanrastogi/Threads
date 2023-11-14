@@ -18,8 +18,6 @@ import useShowToast from "../hooks/useShowToast";
 
 export default function UpdateProfilePage() {
 
-	const port = "https://threads-server-zh1c.onrender.com";
-
 	const [user, setUser] = useRecoilState(userAtom);
 	const [inputs, setInputs] = useState({
 		name: user.name,
@@ -40,7 +38,7 @@ export default function UpdateProfilePage() {
 		if (updating) return;
 		setUpdating(true);
 		try {
-			const res = await fetch(`${port}/api/users/update/${user._id}`, {
+			const res = await fetch(`/api/users/update/${user._id}`, {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",

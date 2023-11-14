@@ -4,14 +4,12 @@ import useShowToast from "./useShowToast";
 
 const useLogout = () => {
 
-	const port = "https://threads-server-zh1c.onrender.com";
-
 	const setUser = useSetRecoilState(userAtom);
 	const showToast = useShowToast();
 
 	const logout = async () => {
 		try {
-			const res = await fetch(`${port}/api/users/logout`, {
+			const res = await fetch(`/api/users/logout`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

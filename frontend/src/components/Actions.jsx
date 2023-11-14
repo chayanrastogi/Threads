@@ -23,8 +23,6 @@ import postsAtom from "../atoms/postsAtom";
 
 const Actions = ({ post }) => {
 
-	const port = "https://threads-server-zh1c.onrender.com";
-
 	const user = useRecoilValue(userAtom);
 	const [liked, setLiked] = useState(post.likes.includes(user?._id));
 	const [posts, setPosts] = useRecoilState(postsAtom);
@@ -40,7 +38,7 @@ const Actions = ({ post }) => {
 		if (isLiking) return;
 		setIsLiking(true);
 		try {
-			const res = await fetch(`${port}/api/posts/like/ `+ post._id, {
+			const res = await fetch(`/api/posts/like/ `+ post._id, {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
@@ -82,7 +80,7 @@ const Actions = ({ post }) => {
 		if (isReplying) return;
 		setIsReplying(true);
 		try {
-			const res = await fetch(`${port}/api/posts/reply/` + post._id, {
+			const res = await fetch(`/api/posts/reply/` + post._id, {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",

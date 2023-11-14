@@ -23,8 +23,6 @@ import usePreviewImg from "../hooks/usePreviewImg";
 
 const MessageInput = ({ setMessages }) => {
 
-	const port = "https://threads-server-zh1c.onrender.com";
-
 	const [messageText, setMessageText] = useState("");
 	const showToast = useShowToast();
 	const selectedConversation = useRecoilValue(selectedConversationAtom);
@@ -42,7 +40,7 @@ const MessageInput = ({ setMessages }) => {
 		setIsSending(true);
 
 		try {
-			const res = await fetch(`${port}/api/messages`, {
+			const res = await fetch(`/api/messages`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
