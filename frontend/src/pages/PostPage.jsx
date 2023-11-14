@@ -75,7 +75,15 @@ const PostPage = () => {
 		<>
 			<Flex>
 				<Flex w={"full"} alignItems={"center"} gap={3}>
-					<Avatar src={user.profilePic} size={"md"} name='Mark Zuckerberg' />
+				
+				{
+					user.profilePic !== null ? 
+						<Avatar src={user.profilePic } size={"md"} name='Mark Zuckerberg' /> : 
+						<Avatar src='/verified.png' size={"md"} name='Mark Zuckerberg' />
+					
+				}
+
+					
 					<Flex>
 						<Text fontSize={"sm"} fontWeight={"bold"}>
 							{user.username}

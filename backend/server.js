@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5000;
 
 // Allow requests from specific origins
 const corsOptions = {
-	origin: 'https://6550bfb877b78a726e8dbdb2--frabjous-pegasus-595d44.netlify.app',
+	origin: 'https://threads-server-zh1c.onrender.com',
   };
   
   app.use(cors(corsOptions));
