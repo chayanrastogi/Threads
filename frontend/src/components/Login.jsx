@@ -35,7 +35,7 @@ export default function Login() {
     const handleLogin = async () => {
         setLoading(true);
         try {
-            const res = await fetch(`/api/users/login`, {
+            const res = await fetch(`https://threads-server-zh1c.onrender.com/api/users/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -10,7 +10,7 @@ export const SettingsPage = () => {
 		if (!window.confirm("Are you sure you want to freeze your account?")) return;
 
 		try {
-			const res = await fetch("/api/users/freeze", {
+			const res = await fetch("https://threads-server-zh1c.onrender.com/api/users/freeze", {
 				method: "PUT",
 				headers: { "Content-Type": "application/json" },
 			});

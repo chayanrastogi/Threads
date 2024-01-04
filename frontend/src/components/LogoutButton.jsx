@@ -10,7 +10,7 @@ const LogoutButton = () => {
 
 	const handleLogout = async () => {
 		try {
-			const res = await fetch("/api/users/logout", {
+			const res = await fetch("https://threads-server-zh1c.onrender.com/api/users/logout", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
