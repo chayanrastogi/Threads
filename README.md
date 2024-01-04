@@ -48,10 +48,10 @@ https://github.com/chayanrastogi/Threads/assets/80814459/f7c6a530-0395-4ab6-ac2a
 ## Installation and Setup 🚀
 - Clone this repository to your local machine
 - npm install
-- Add .env file:
+- cd backend and add .env file :
     - `MONGO_URI`
     - `JWT_SECRET`
     - `CLOUDINARY_CLOUD_NAME`
     - `CLOUDINARY_API_KEY`
     - `CLOUDINARY_API_SECRET`
-- npm run dev
+- `npm run dev` in both frontend and backend directories.
