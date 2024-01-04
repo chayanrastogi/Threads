@@ -7,10 +7,10 @@ import Conversation from "../models/conversationModel.js";
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-	// cors: {
-	// 	origin: "https://6596b9e9827beb0091adea08--frabjous-pegasus-595d44.netlify.app/",
-	// 	methods: ["GET", "POST"],
-	// },
+	cors: {
+		origin: "https://threads-server-zh1c.onrender.com",
+		methods: ["GET", "POST"],
+	},
 });
 
 export const getRecipientSocketId = (recipientId) => {
