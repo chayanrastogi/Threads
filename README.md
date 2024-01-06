@@ -35,7 +35,7 @@ https://github.com/chayanrastogi/Threads/assets/80814459/f7c6a530-0395-4ab6-ac2a
 - 🧩 Suggested users section for personalized connections
 - 🎉 Modern design aesthetics for an engaging user interface
 
-## 🔧 Tech Stack 👩🏻‍💻:
+## 🔧 Tech Stack 👩🏻‍💻 :
 
 - 🔄 React, Node, Express
 - 📊 MongoDB for data storage
